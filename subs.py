@@ -2,6 +2,7 @@ import codecs
 import os
 import re
 import collections
+import chardet
 
 from common import SushiError, format_time, format_srt_time
 
@@ -218,7 +219,10 @@ class AssScript(ScriptBase):
         parse_function = None
 
         try:
-            with codecs.open(path, encoding='utf-8-sig') as script:
+            rawdata = open(path, 'rb').read()
+            result = chardet.detect(rawdata) 
+            print(result)
+            with codecs.open(path, encoding=result['encoding']) as script:
                 for line_idx, line in enumerate(script):
                     line = line.strip()
                     if not line:
